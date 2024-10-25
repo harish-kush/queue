@@ -1,0 +1,115 @@
+class MyCircularDeque {
+public:
+    class node{
+        public:
+       int val;
+       node* next;
+       node* prev;
+    };
+    node* head;
+    node* tail;
+    int ms;
+    int ls;
+    MyCircularDeque(int k) {
+        ms = k;
+        ls = 0;
+        head = NULL;
+        tail = NULL;
+    }
+    
+    bool insertFront(int value) {
+        if(ms==ls) return false;
+        node* nn = new node(value);
+        if(!head){
+            head = tail = nn;
+            head->next = head;
+            tail->prev = head; // circular
+        }
+        else{
+            nn->next = head;
+            head->prev = nn;
+            tail->next = nn;
+            nn->prev =  tail;
+            head = nn;
+        }
+        ls++;
+        return true;
+    }
+    
+    bool insertLast(int value) {
+        if(ms==ls) return false;
+        if(ms==ls) return false;
+        node* nn = new node(value);
+        if(!head){
+            head = tail = nn;
+            head->next = head;
+            tail->prev = head; // circular
+        }
+        else{
+            tail->next = nn;
+            nn->prev= tail;
+            nn->next = head;
+            tail = nn;
+            head->prev = tail;
+        }
+        ls++;
+        return true;
+    }
+    
+    bool deleteFront() {
+        if(ls==0) return false;
+        if(ls==1) {
+            delete head;
+            head = tail = NULL;
+        }
+        else{
+        node* c = head;
+        head = head->next;
+        head->prev = tail;
+        tail->next = head;
+         c->next = c->prev = NULL;
+        delete c;
+        }
+        ls--;
+        return true;
+    }
+    
+    bool deleteLast() {
+        if(ls==0) return false;
+        if(ls==1) {
+            delete head;
+            head = tail = NULL;
+        }
+        else{
+        node* c = tail;
+        tail = tail->prev;
+        tail->next = head;
+        head->prev = tail;
+        c->next = c->prev = NULL;
+        delete c;
+        }
+        ls--;
+        return true;
+    }
+    
+    int getFront() {
+        if(ls==0) return -1;
+        else return head->val;
+    }
+    
+    int getRear() {
+        if(ls==0) return -1;
+        
+        else return tail->val;
+    }
+    
+    bool isEmpty() {
+        if(ls==0) return true;
+        else return false;
+    }
+    
+    bool isFull() {
+        if(ls==ms) return true;
+        else return false;
+    }
+};
